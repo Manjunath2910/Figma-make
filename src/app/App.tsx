@@ -5,6 +5,8 @@ import logoImg from "@/imports/pandamoney_logo_dark__1_.png";
 const DESIGN_WIDTH = 1512;
 const DESIGN_HEIGHT = 3500;
 const MOBILE_BREAKPOINT = 768;
+const MIN_SCALE = 0.65;
+const MAX_SCALE = 1.05;
 
 function MobileFallback() {
   return (
@@ -82,7 +84,8 @@ export default function App() {
   useEffect(() => {
     const updateLayout = () => {
       const width = window.innerWidth;
-      const nextScale = Math.min(1, width / DESIGN_WIDTH);
+      const rawScale = width / DESIGN_WIDTH;
+      const nextScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, rawScale));
       setScale(Number.isFinite(nextScale) ? nextScale : 1);
       setIsMobile(width < MOBILE_BREAKPOINT);
     };
@@ -101,13 +104,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden bg-[#021511]">
-      <div className="mx-auto w-full overflow-hidden" style={{ maxWidth: DESIGN_WIDTH, minHeight: scaledHeight }}>
+      <div className="mx-auto w-full overflow-hidden" style={{ width: "100%", minHeight: scaledHeight }}>
         <div
-          className="relative"
+          className="relative mx-auto"
           style={{
-            width: scaledWidth,
-            minHeight: scaledHeight,
-            margin: "0 auto",
+            width: DESIGN_WIDTH,
+            minHeight: DESIGN_HEIGHT,
             transform: `scale(${scale})`,
             transformOrigin: "top center",
           }}
